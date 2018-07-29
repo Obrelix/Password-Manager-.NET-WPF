@@ -21,7 +21,7 @@ namespace Password_Manager
     {
         logOn = 1,
         AddFiles = 2,
-        AddText = 3
+        Main = 3
     }
 
     /// <summary>
@@ -37,8 +37,9 @@ namespace Password_Manager
 
         page frameState;
         pgLogin logOn;
+        pgMain pgDataGrid;
         public static string savePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Secure_Log";
-        public static string saveFile = savePath + "\\log.json";
+        public static string saveFile = savePath + "\\report.json";
         public static string password;
 
         #endregion
@@ -48,43 +49,67 @@ namespace Password_Manager
 
         public void changeHeight(double height)
         {
-            if (!Dispatcher.CheckAccess())
+            try
             {
-                Dispatcher.Invoke(new Action<double>(changeHeight), new object[] { height });
-                return;
+                if (!Dispatcher.CheckAccess())
+                {
+                    Dispatcher.Invoke(new Action<double>(changeHeight), new object[] { height });
+                    return;
+                }
+                this.Height = height;
             }
-            this.Height = height;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public void changeWidth(double width)
         {
-            if (!Dispatcher.CheckAccess())
+            try
             {
-                Dispatcher.Invoke(new Action<double>(changeWidth), new object[] { width });
-                return;
+                if (!Dispatcher.CheckAccess())
+                {
+                    Dispatcher.Invoke(new Action<double>(changeWidth), new object[] { width });
+                    return;
+                }
+                this.Width = width;
             }
-            this.Width = width;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public void changePage(page page)
         {
-            if (!Dispatcher.CheckAccess())
+            try
             {
-                Dispatcher.Invoke(new Action<page>(changePage), new object[] { page });
-                return;
+                if (!Dispatcher.CheckAccess())
+                {
+                    Dispatcher.Invoke(new Action<page>(changePage), new object[] { page });
+                    return;
+                }
+                switch (page)
+                {
+                    case page.logOn:
+                        frame.Navigate(logOn); frameState = page.logOn;
+                        break;
+                    case page.AddFiles:
+                        //frame.Navigate(addfile); frameState = page.AddFiles;
+                        break;
+                    case page.Main:
+                        frame.Navigate(pgDataGrid); frameState = page.Main;
+                        break;
+                    default: break;
+                }
             }
-            switch (page)
+            catch (Exception)
             {
-                case page.logOn:
-                    frame.Navigate(logOn); frameState = page.logOn;
-                    break;
-                case page.AddFiles:
-                    //frame.Navigate(addfile); frameState = page.AddFiles;
-                    break;
-                case page.AddText:
-                    //frame.Navigate(addText); frameState = page.AddText;
-                    break;
-                default: break;
+
+                throw;
             }
         }
 
@@ -94,13 +119,21 @@ namespace Password_Manager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(@savePath))
-                Directory.CreateDirectory(@savePath);
-            logOn = new pgLogin(this);
-            //addfile = new pgAddFiles(this);
-            //addText = new pgAddText(this);
-            changePage(page.logOn);
-            //frame.Source = new Uri("/Hide-Your-Files-Inside-a-Picture;component/Pages/pgAddFiles.xaml", UriKind.Relative);
+            try
+            {
+                if (!Directory.Exists(@savePath))
+                    Directory.CreateDirectory(@savePath);
+                logOn = new pgLogin(this);
+                //addfile = new pgAddFiles(this);
+                pgDataGrid = new pgMain(this);
+                changePage(page.logOn);
+                //frame.Source = new Uri("/Hide-Your-Files-Inside-a-Picture;component/Pages/pgAddFiles.xaml", UriKind.Relative);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void mnuExit_Click(object sender, RoutedEventArgs e)
@@ -110,7 +143,7 @@ namespace Password_Manager
 
         private void mnuAddText_Click(object sender, RoutedEventArgs e)
         {
-            changePage(page.AddText);
+            changePage(page.Main);
         }
 
         private void mnuHideFiles(object sender, RoutedEventArgs e)
@@ -148,7 +181,7 @@ namespace Password_Manager
                 case page.AddFiles:
                     mnuMainMenu.IsEnabled = true;
                     break;
-                case page.AddText:
+                case page.Main:
                     mnuMainMenu.IsEnabled = true;
                     break;
                 default:

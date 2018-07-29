@@ -39,16 +39,41 @@ namespace Password_Manager.Pages
 
         private void btnLogON_Click(object sender, RoutedEventArgs e)
         {
-            if (txtPassword.Password.Length >= 8)
+            try
             {
-                password = Gtools.hashFromString(Gtools.encodeMix(txtPassword.Password, txtPassword.Password));
+                if (txtPassword.Password.Length >= 8)
+                {
+                    password = Gtools.hashFromString(Gtools.encodeMix(txtPassword.Password, txtPassword.Password));
 
-                parentWindow.changePage(page.AddText);
-                       
+                    parentWindow.changePage(page.Main);
+
+                }
+                else MessageBox.Show("The Password must contain at least 8 characters",
+                                        "Log in Error.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-            else MessageBox.Show("The Username must contain at least 5 characters " + Environment.NewLine +
-                                    "The Password must contain at least 8 characters",
-                                    "Log in Error.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter) btnLogON_Click(this, new RoutedEventArgs());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            password = string.Empty;
         }
 
         #endregion

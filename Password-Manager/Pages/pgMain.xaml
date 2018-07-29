@@ -1,0 +1,71 @@
+﻿<Page x:Class="Password_Manager.pgMain"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Password_Manager"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="800"
+      Title="pgMain">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="266*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.Column="1" Grid.Row="0" Margin="10,10,10,0">
+            <Menu.Background>
+                <ImageBrush/>
+            </Menu.Background>
+            <MenuItem x:Name="mnuSaveFile" ToolTip="Save data to file." Click="Menu_Click">
+                <MenuItem.Header>
+                    <StackPanel >
+                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/SaveFIle.ico" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem x:Name="mnuLoadFile" ToolTip="Load from File."  Click="Menu_Click">
+                <MenuItem.Header>
+                    <StackPanel >
+                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/LoadFIle.ico" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+
+        <DataGrid ItemsSource="{Binding}" x:Name="dataGrid" Margin="10" AutoGenerateColumns="False" CanUserReorderColumns="True" CanUserSortColumns="True" CanUserResizeRows="False" ColumnWidth="SizeToHeader" Grid.Column="1" Grid.Row="1">
+            <DataGrid.Background>
+                <ImageBrush/>
+            </DataGrid.Background>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontFamily" Value="Consolas"/>
+                    <Setter Property="Background" Value="WhiteSmoke"/>
+                    <!--<Setter Property="HorizontalAlignment" Value="Center"/>-->
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" FontFamily="Consolas" FontSize="14" />
+                <DataGridTextColumn Binding="{Binding UserName}" Header="User Name" Width="130" FontFamily="Consolas" FontSize="14" FontWeight="Bold" />
+                <DataGridTextColumn Binding="{Binding Password}" Header="Password" Width="200" FontFamily="Consolas" FontSize="14" FontWeight="Bold" />
+                <DataGridTextColumn Binding="{Binding Comments}" Header="Comments" Width="300" FontFamily="Consolas" FontSize="14"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Page>

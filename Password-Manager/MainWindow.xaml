@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Password_Manager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
+        Title="Password Manager" Height="350" Width="800" Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="Images/LogIn.jpg" Stretch="UniformToFill"/>
+    </Window.Background>
     <DockPanel>
-        <Menu DockPanel.Dock="Top" Background="White">
+        <Menu DockPanel.Dock="Top">
+            <Menu.Background>
+                <ImageBrush/>
+            </Menu.Background>
             <MenuItem Name="mnuMainMenu" Header="_Menu" >
                 <Separator />
                 <Separator />
