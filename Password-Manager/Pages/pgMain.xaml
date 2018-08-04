@@ -7,10 +7,13 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="800"
       Title="pgMain">
-
+    <Page.InputBindings>
+        <KeyBinding Command="ApplicationCommands.Open"
+              Gesture="CTRL+R" Key="Return" />
+    </Page.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="266*"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
@@ -20,27 +23,8 @@
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.Column="1" Grid.Row="0" Margin="10,10,10,0">
-            <Menu.Background>
-                <ImageBrush/>
-            </Menu.Background>
-            <MenuItem x:Name="mnuSaveFile" ToolTip="Save data to file." Click="Menu_Click">
-                <MenuItem.Header>
-                    <StackPanel >
-                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/SaveFIle.ico" />
-                    </StackPanel>
-                </MenuItem.Header>
-            </MenuItem>
-            <MenuItem x:Name="mnuLoadFile" ToolTip="Load from File."  Click="Menu_Click">
-                <MenuItem.Header>
-                    <StackPanel >
-                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/LoadFIle.ico" />
-                    </StackPanel>
-                </MenuItem.Header>
-            </MenuItem>
-        </Menu>
 
-        <DataGrid ItemsSource="{Binding}" x:Name="dataGrid" Margin="10" AutoGenerateColumns="False" CanUserReorderColumns="True" CanUserSortColumns="True" CanUserResizeRows="False" ColumnWidth="SizeToHeader" Grid.Column="1" Grid.Row="1">
+        <DataGrid ItemsSource="{Binding}" x:Name="dataGrid" Margin="10" AutoGenerateColumns="False" CanUserReorderColumns="True" CanUserSortColumns="True" ColumnWidth="SizeToHeader" Grid.Column="1" Grid.Row="1" BorderThickness="0" AllowDrop="True" ClipToBounds="True" ColumnHeaderHeight="30">
             <DataGrid.Background>
                 <ImageBrush/>
             </DataGrid.Background>
@@ -60,10 +44,10 @@
 
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" FontFamily="Consolas" FontSize="14" />
-                <DataGridTextColumn Binding="{Binding UserName}" Header="User Name" Width="130" FontFamily="Consolas" FontSize="14" FontWeight="Bold" />
-                <DataGridTextColumn Binding="{Binding Password}" Header="Password" Width="200" FontFamily="Consolas" FontSize="14" FontWeight="Bold" />
-                <DataGridTextColumn Binding="{Binding Comments}" Header="Comments" Width="300" FontFamily="Consolas" FontSize="14"/>
+                <DataGridTextColumn Binding="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Header="Description" Width="Auto" FontFamily="Consolas" FontSize="14" MinWidth="120" />
+                <DataGridTextColumn Binding="{Binding Path=UserName, UpdateSourceTrigger=PropertyChanged}" Header="User Name" Width="Auto" FontFamily="Consolas" FontSize="14" FontWeight="Bold" MinWidth="150" />
+                <DataGridTextColumn Binding="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" Header="Password" Width="Auto" FontFamily="Consolas" FontSize="14" FontWeight="Bold" MinWidth="150" />
+                <DataGridTextColumn Binding="{Binding Path=Comments, UpdateSourceTrigger=PropertyChanged}" Header="Comments" Width="Auto" FontFamily="Consolas" FontSize="14" MinWidth="110"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -29,18 +29,23 @@ namespace Password_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-        #region General Declaretion
-
         page frameState;
         pgLogin logOn;
         pgMain pgDataGrid;
         public static string savePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Secure_Log";
         public static string saveFile = savePath + "\\report.json";
-        public static string password;
+        public static string password { get; set; }
+        public MainWindow()
+        {
+            InitializeComponent();
+            if (!Directory.Exists(@savePath))
+                Directory.CreateDirectory(@savePath);
+            logOn = new pgLogin(this);
+            pgDataGrid = new pgMain(this);
+            changePage(page.logOn);
+        }
+        #region General Declaretion
+
 
         #endregion
 
@@ -121,12 +126,6 @@ namespace Password_Manager
         {
             try
             {
-                if (!Directory.Exists(@savePath))
-                    Directory.CreateDirectory(@savePath);
-                logOn = new pgLogin(this);
-                //addfile = new pgAddFiles(this);
-                pgDataGrid = new pgMain(this);
-                changePage(page.logOn);
                 //frame.Source = new Uri("/Hide-Your-Files-Inside-a-Picture;component/Pages/pgAddFiles.xaml", UriKind.Relative);
             }
             catch (Exception)
@@ -141,19 +140,11 @@ namespace Password_Manager
             Application.Current.Shutdown();
         }
 
-        private void mnuAddText_Click(object sender, RoutedEventArgs e)
-        {
-            changePage(page.Main);
-        }
 
-        private void mnuHideFiles(object sender, RoutedEventArgs e)
-        {
-            changePage(page.AddFiles);
-        }
 
         private void mnuDownload_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Obrelix/Hide-Your-Files-Inside-a-Picture");
+            System.Diagnostics.Process.Start("https://github.com/Obrelix/Password-Manager-.NET-WPF");
         }
 
         private void mnuLogIn_Click(object sender, RoutedEventArgs e)
@@ -163,7 +154,7 @@ namespace Password_Manager
 
         private void mnuReport_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Obrelix/Hide-Your-Files-Inside-a-Picture/issues");
+            System.Diagnostics.Process.Start("https://github.com/Obrelix/Password-Manager-.NET-WPF/issues");
         }
 
         private void frame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -171,26 +162,99 @@ namespace Password_Manager
 
         }
 
-        private void frame_Navigated(object sender, NavigationEventArgs e)
+        private void disableMenuItems()
         {
             switch (frameState)
             {
                 case page.logOn:
-                    mnuMainMenu.IsEnabled = false;
-                    break;
-                case page.AddFiles:
-                    mnuMainMenu.IsEnabled = true;
+                    mnuClear.Visibility = Visibility.Hidden;
+                    mnuLoadFile.Visibility = Visibility.Hidden;
+                    mnuSaveFile.Visibility = Visibility.Hidden;
+                    mnuGenerate.Visibility = Visibility.Hidden;
                     break;
                 case page.Main:
-                    mnuMainMenu.IsEnabled = true;
+                    mnuClear.Visibility = Visibility.Visible;
+                    mnuLoadFile.Visibility = Visibility.Visible;
+                    mnuSaveFile.Visibility = Visibility.Visible;
+                    mnuGenerate.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
             }
         }
 
-        #endregion
+        private void frame_Navigated(object sender, NavigationEventArgs e)
+        {
+            disableMenuItems();
+        }
 
+        private void Menu_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                switch (((MenuItem)sender).Name)
+                {
+                    case "mnuSaveFile":
+                        pgDataGrid.saveFunctionality();
+                        break;
+                    case "mnuLoadFile":
+                        pgDataGrid.loadFunctionality();
+                        break;
+                    case "mnuGenerate":
+                        pgDataGrid.wndGeneratorShow();
+                        break;
+                    case "mnuLogIn":
+                        pgDataGrid.clearFunctionality();
+                        changePage(page.logOn);
+                        break;
+                    case "mnuClear":
+                        pgDataGrid.clearFunctionality();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                switch (e.Key)
+                {
+                    case Key.S:
+                        if (Keyboard.IsKeyDown(Key.LeftCtrl)) pgDataGrid.saveFunctionality();
+                        break;
+                    case Key.F:
+                        if (Keyboard.IsKeyDown(Key.LeftCtrl)) pgDataGrid.loadFunctionality();
+                        break;
+                    case Key.G:
+                        if (Keyboard.IsKeyDown(Key.LeftCtrl)) pgDataGrid.wndGeneratorShow();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            mnuHelp.Margin = new Thickness((this.Width - 100), 0, 0, 0);
+            mnuHelp.Margin = new Thickness(0);
+            //mnuMain.Height = 25;
+        }
+
+        #endregion
+        
     }
 
 

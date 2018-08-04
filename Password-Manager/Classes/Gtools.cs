@@ -93,6 +93,9 @@ namespace Password_Manager
             {
                 data = data.Insert(data.Length - 2, str1);
                 data = Base64Encode(data);
+                data = data.Insert(5, str1.Substring(0,4));
+                data = Base64Encode(data);
+                data = data.Insert(10, str1.Substring(4,6));
                 return Base64Encode(data);
             }
             catch (Exception)
@@ -102,7 +105,7 @@ namespace Password_Manager
             }
         }
 
-        public static string decodeMix(string data, string str1, string str2)
+        public static string decodeMix(string data, string str1)
         {
             try
             {

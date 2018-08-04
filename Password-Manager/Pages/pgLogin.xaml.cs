@@ -43,8 +43,8 @@ namespace Password_Manager.Pages
             {
                 if (txtPassword.Password.Length >= 8)
                 {
-                    password = Gtools.hashFromString(Gtools.encodeMix(txtPassword.Password, txtPassword.Password));
-
+                    password = Gtools.encodeMix(txtPassword.Password, txtPassword.Password);
+                    MainWindow.password = password;
                     parentWindow.changePage(page.Main);
 
                 }

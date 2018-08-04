@@ -5,34 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Password_Manager"
         mc:Ignorable="d"
-        Title="Password Manager" Height="350" Width="800" Loaded="Window_Loaded">
+        Title="Password Manager" Height="300" Width="600" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" KeyDown="Window_KeyDown">
     <Window.Background>
         <ImageBrush ImageSource="Images/LogIn.jpg" Stretch="UniformToFill"/>
     </Window.Background>
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <Menu x:Name="mnuMain" DockPanel.Dock="Top">
             <Menu.Background>
                 <ImageBrush/>
             </Menu.Background>
-            <MenuItem Name="mnuMainMenu" Header="_Menu" >
-                <Separator />
-                <Separator />
-                <MenuItem Name="mnuLogIn" Header="_Log in page" Click="mnuLogIn_Click"  />
-                <MenuItem Name="mmuAddText" Header="En_crypt your Passwords" Click="mnuAddText_Click"  />
-                <MenuItem Name="mnuHide" Header="_Hide Files" Click="mnuHideFiles"  />
-                <Separator />
-                <Separator />
-                <MenuItem Name="mnuExit" Header="_Exit" Click="mnuExit_Click"  />
+
+            <Separator />
+            <MenuItem x:Name="mnuSaveFile" ToolTip="Save data to file." Click="Menu_Click" Margin="0">
+                <MenuItem.Header>
+                    <StackPanel >
+                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/SaveFIle.ico" />
+                    </StackPanel>
+                </MenuItem.Header>
             </MenuItem>
-            <MenuItem Name="mnuHelp" Header="Help">
-                <Separator />
-                <MenuItem Name="mnuDownload" Header="Download" Click="mnuDownload_Click" />
-                <MenuItem Name="mnuReport" Header="Report an _issue" Click="mnuReport_Click" />
-                <Separator />
+            <MenuItem x:Name="mnuLoadFile" ToolTip="Load from File."  Click="Menu_Click">
+                <MenuItem.Header>
+                    <StackPanel >
+                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/LoadFIle.ico" />
+                    </StackPanel>
+                </MenuItem.Header>
             </MenuItem>
+            <MenuItem x:Name="mnuClear" ToolTip="Clear."  Click="Menu_Click">
+                <MenuItem.Header>
+                    <StackPanel >
+                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/Clear.png" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem x:Name="mnuGenerate" ToolTip="Generate Random Password."  Click="Menu_Click">
+                <MenuItem.Header>
+                    <StackPanel >
+                        <Image Width="25" Height="25" Source="/Password-Manager;component/Images/generate.png" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <Separator />
+            <Separator />
+            <Separator />
+            <MenuItem Name="mnuHelp" Header="Help" Background="#FFB4FFF5" FontWeight="Bold">
+                <MenuItem Name="mnuDownload" Header="Download" Click="Menu_Click" />
+                <MenuItem Name="mnuReport" Header="Report an _issue" Click="Menu_Click" />
+            </MenuItem>
+
         </Menu>
         <Grid>
-            <Frame x:Name="frame" NavigationUIVisibility="Hidden"  Margin="0" DataContextChanged="frame_DataContextChanged" Navigated="frame_Navigated"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="85*"/>
+            </Grid.ColumnDefinitions>
+            <Frame x:Name="frame" NavigationUIVisibility="Hidden"  Margin="0" DataContextChanged="frame_DataContextChanged" Navigated="frame_Navigated" Grid.ColumnSpan="2"/>
         </Grid>
     </DockPanel>
 </Window>

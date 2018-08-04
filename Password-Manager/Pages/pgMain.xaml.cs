@@ -38,8 +38,13 @@ namespace Password_Manager
         {
             try
             {
+                dataGrid.BeginInit();
                 lstCredentials.Clear();
-                lstCredentials = JsonConvert.DeserializeObject<List<Credentials>>(System.IO.File.ReadAllText(path));
+                string strData = File.ReadAllText(path);
+                strData = StringCipher.Decrypt(strData, MainWindow.password);
+                lstCredentials = JsonConvert.DeserializeObject<List<Credentials>>(strData);
+                dataGrid.DataContext = lstCredentials;
+                dataGrid.EndInit();
             }
             catch (Exception exc)
             {
@@ -52,9 +57,11 @@ namespace Password_Manager
         {
             try
             {
+                dataGrid.CommitEdit();
                 string contentsToWriteToFile = JsonConvert.SerializeObject(lstCredentials.ToArray(), Newtonsoft.Json.Formatting.Indented);
-
+                contentsToWriteToFile = StringCipher.Encrypt(contentsToWriteToFile, MainWindow.password);
                 File.WriteAllText(path, contentsToWriteToFile);
+
 
             }
             catch (Exception exc)
@@ -63,12 +70,18 @@ namespace Password_Manager
             }
         }
 
-        private void fillCredentialListFromDataGrid()
+        public void clearFunctionality()
         {
-            lstCredentials.Clear();
-            foreach ( DataGridRow row in GetDataGridRows(dataGrid))
+            try
             {
-                lstCredentials.Add((Credentials)row.DataContext);
+                dataGrid.BeginInit();
+                lstCredentials.Clear();
+                dataGrid.DataContext = lstCredentials;
+                dataGrid.EndInit();
+            }
+            catch(Exception exc)
+            {
+                System.Diagnostics.Debug.WriteLine(exc.Message + " Save User Error.\n");
             }
         }
 
@@ -82,15 +95,15 @@ namespace Password_Manager
                 if (null != row) yield return row;
             }
         }
-
-        private void saveFunctionality()
+        
+        public void saveFunctionality()
         {
             try
             {
                 Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-                saveFileDialog.FileName = "test123";
-                saveFileDialog.DefaultExt = ".json"; // Default file extension
-                saveFileDialog.Filter = "Json Files (.json)|*.json";
+                saveFileDialog.FileName = "data";
+                saveFileDialog.DefaultExt = ".txt"; // Default file extension
+                saveFileDialog.Filter = "Document Files (.txt)|*.txt";
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     saveToFile(saveFileDialog.FileName);
@@ -104,20 +117,32 @@ namespace Password_Manager
             }
         }
 
-        private void loadFunctionality()
+        public void loadFunctionality()
         {
             try
             {
                 Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-                openFileDialog.DefaultExt = ".json"; // Default file extension
-                openFileDialog.Filter = "Json Files (.json)|*.json";
+                openFileDialog.DefaultExt = ".txt"; // Default file extension
+                openFileDialog.Filter = "Document Files (.txt)|*.txt";
                 if (openFileDialog.ShowDialog() == true)
                 {
                     loadFormFile(openFileDialog.FileName);
-                    dataGrid.DataContext = null;
-                    dataGrid.DataContext = lstCredentials;
                 }
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public void wndGeneratorShow()
+        {
+            try
+            {
+                wndGeneratePassword wnd = new wndGeneratePassword();
+                wnd.Show();
+                wnd.Focus();
             }
             catch (Exception)
             {
@@ -128,28 +153,10 @@ namespace Password_Manager
         #endregion
 
         #region "Event Handlers"
-        private void Menu_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                switch(((MenuItem)sender).Name)
-                {
-                    case "mnuSaveFile":
-                        saveFunctionality();
-                        break;
-                    case "mnuLoadFile":
-                        loadFunctionality();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
-        }
+
+
         #endregion
+
     }
 }
