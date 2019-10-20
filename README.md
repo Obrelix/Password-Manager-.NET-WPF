@@ -6,7 +6,7 @@ An application that serialize and encrypts multiple passwords with a key generat
 
 ![alt tag](https://raw.githubusercontent.com/Obrelix/Password-Manager-.NET-WPF/master/Password-Manager/Images/MainPreview.PNG)
 
-# How this apllication works 
+# How it works 
 
 1) In the log in page the app ask from the user to type a password ( longer than 8 characters). This password is used in order, the app, to create a more complex key that will encrypt - decrypt the information. The above password doesn't stored anywhere at the computer.  
 
