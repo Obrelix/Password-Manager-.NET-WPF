@@ -8,6 +8,6 @@ An application that serialize and encrypts multiple passwords with a key generat
 
 # How it works 
 
-1) In the log in page the app ask from the user to type a password ( longer than 8 characters). This password is used in order, the app, to create a more complex key that will encrypt - decrypt the information. The above password doesn't stored anywhere at the computer.  
+1) In the log in page the application ask from the user to type a password ( longer than 8 characters). This password used in order, the app, to create a more complex key that will encrypt - decrypt the information. The above password doesn't stored anywhere at the computer.  
 
 2) When the user have logged in, he can choose to load any pre-existing file, with his passwords, or to create a new one. Please note that if the user doesn't type his password correctly at the first stage, the application will fail to load any stored information that have encrypted with different key.
