@@ -24,24 +24,28 @@ namespace Password_Manager
     public partial class pgMain : Page
     {
         MainWindow parentWindow;
+        private string password;
         List<Credentials> lstCredentials = new List<Credentials>();
         public pgMain(MainWindow parent)
         {
             InitializeComponent();
             parentWindow = parent;
-            //crList.Add(new Credentials("Obrelix", "Ovelixg13", "Winbank", "Den exei lefta"));
             dataGrid.DataContext = lstCredentials;
+            txtPassword.Visibility = Visibility.Visible;
+            txtDummyPassword.Visibility = Visibility.Collapsed;
         }
 
         #region "Methods"
+
         private void loadFormFile(string path)
         {
             try
             {
+                clearFunctionality();
                 dataGrid.BeginInit();
                 lstCredentials.Clear();
                 string strData = File.ReadAllText(path);
-                strData = StringCipher.Decrypt(strData, MainWindow.password);
+                strData = StringCipher.Decrypt(strData, password);
                 lstCredentials = JsonConvert.DeserializeObject<List<Credentials>>(strData);
                 dataGrid.DataContext = lstCredentials;
                 dataGrid.EndInit();
@@ -59,7 +63,7 @@ namespace Password_Manager
             {
                 dataGrid.CommitEdit();
                 string contentsToWriteToFile = JsonConvert.SerializeObject(lstCredentials.ToArray(), Newtonsoft.Json.Formatting.Indented);
-                contentsToWriteToFile = StringCipher.Encrypt(contentsToWriteToFile, MainWindow.password);
+                contentsToWriteToFile = StringCipher.Encrypt(contentsToWriteToFile, password);
                 File.WriteAllText(path, contentsToWriteToFile);
 
 
@@ -136,6 +140,7 @@ namespace Password_Manager
                 throw;
             }
         }
+
         public void wndGeneratorShow()
         {
             try
@@ -150,11 +155,65 @@ namespace Password_Manager
                 throw;
             }
         }
+
         #endregion
 
         #region "Event Handlers"
 
+        private void dataGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            try
+            {
+                double width = 0;
+                foreach (DataGridColumn column in dataGrid.Columns)
+                {
+                    width += column.ActualWidth;
+                }
+                if (width < 801) parentWindow.changeWidth(width + 50);
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+        }
+
+        private void Image_MouseEnter(object sender, MouseEventArgs e)
+        {
+            pnlShow.Background = Brushes.Tomato;
+            txtPassword.Visibility = Visibility.Collapsed;
+            txtDummyPassword.Visibility = Visibility.Visible;
+            txtDummyPassword.Text = txtPassword.Password;
+        }
+
+        private void imgShow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            txtPassword.Visibility = Visibility.Visible;
+            txtDummyPassword.Visibility = Visibility.Collapsed;
+            txtDummyPassword.Text = string.Empty;
+            pnlShow.Background = Brushes.Transparent;
+        }
+
+        public void btnLogON_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (txtPassword.Password.Length >= 8)
+                {
+                    password = Gtools.encodeMix(txtPassword.Password, txtPassword.Password);
+                    pnlPassword.Visibility = Visibility.Collapsed;
+                    parentWindow.changePage(page.Main);
+
+                }
+                else MessageBox.Show("The Password must contain at least 8 characters",
+                                        "Log in Error.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         #endregion
 

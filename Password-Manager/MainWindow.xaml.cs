@@ -29,19 +29,17 @@ namespace Password_Manager
     /// </summary>
     public partial class MainWindow : Window
     {
-        page frameState;
-        pgLogin logOn;
+        public page frameState;
         pgMain pgDataGrid;
         public static string savePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Secure_Log";
         public static string saveFile = savePath + "\\report.json";
-        public static string password { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             if (!Directory.Exists(@savePath))
                 Directory.CreateDirectory(@savePath);
-            logOn = new pgLogin(this);
             pgDataGrid = new pgMain(this);
+            frame.Navigate(pgDataGrid);
             changePage(page.logOn);
         }
         #region General Declaretion
@@ -97,19 +95,23 @@ namespace Password_Manager
                     Dispatcher.Invoke(new Action<page>(changePage), new object[] { page });
                     return;
                 }
+                pgDataGrid.Focus();
                 switch (page)
                 {
                     case page.logOn:
-                        frame.Navigate(logOn); frameState = page.logOn;
+                        pgDataGrid.txtPassword.Focus();
                         break;
                     case page.AddFiles:
                         //frame.Navigate(addfile); frameState = page.AddFiles;
                         break;
                     case page.Main:
-                        frame.Navigate(pgDataGrid); frameState = page.Main;
+                        pgDataGrid.dataGrid.Focus();
                         break;
                     default: break;
                 }
+
+                frameState = page;
+                disableMenuItems();
             }
             catch (Exception)
             {
@@ -147,10 +149,6 @@ namespace Password_Manager
             System.Diagnostics.Process.Start("https://github.com/Obrelix/Password-Manager-.NET-WPF");
         }
 
-        private void mnuLogIn_Click(object sender, RoutedEventArgs e)
-        {
-            changePage(page.logOn);
-        }
 
         private void mnuReport_Click(object sender, RoutedEventArgs e)
         {
@@ -167,16 +165,20 @@ namespace Password_Manager
             switch (frameState)
             {
                 case page.logOn:
-                    mnuClear.Visibility = Visibility.Hidden;
-                    mnuLoadFile.Visibility = Visibility.Hidden;
-                    mnuSaveFile.Visibility = Visibility.Hidden;
-                    mnuGenerate.Visibility = Visibility.Hidden;
+                    mnuClear.Visibility = Visibility.Collapsed;
+                    mnuLoadFile.Visibility = Visibility.Collapsed;
+                    mnuSaveFile.Visibility = Visibility.Collapsed;
+                    mnuGenerate.Visibility = Visibility.Collapsed;
+                    pgDataGrid.pnlPassword.Visibility = Visibility.Visible;
+                    pgDataGrid.dataGrid.Visibility = Visibility.Collapsed;
                     break;
                 case page.Main:
                     mnuClear.Visibility = Visibility.Visible;
                     mnuLoadFile.Visibility = Visibility.Visible;
                     mnuSaveFile.Visibility = Visibility.Visible;
                     mnuGenerate.Visibility = Visibility.Visible;
+                    pgDataGrid.pnlPassword.Visibility = Visibility.Collapsed;
+                    pgDataGrid.dataGrid.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -210,6 +212,9 @@ namespace Password_Manager
                     case "mnuClear":
                         pgDataGrid.clearFunctionality();
                         break;
+                    case "mnuPassword":
+                        passVisibilityChange();
+                        break;
                     default:
                         break;
                 }
@@ -220,7 +225,19 @@ namespace Password_Manager
                 throw;
             }
         }
+         private void passVisibilityChange()
+        {
+            try
+            {
+                if (pgDataGrid.pnlPassword.Visibility == Visibility.Collapsed) pgDataGrid.pnlPassword.Visibility = Visibility.Visible;
+                else pgDataGrid.pnlPassword.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+        }
         public void Window_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -235,6 +252,12 @@ namespace Password_Manager
                         break;
                     case Key.G:
                         if (Keyboard.IsKeyDown(Key.LeftCtrl)) pgDataGrid.wndGeneratorShow();
+                        break;
+                    case Key.P:
+                        if (Keyboard.IsKeyDown(Key.LeftCtrl)) passVisibilityChange();
+                        break;
+                    case Key.Enter:
+                        pgDataGrid.btnLogON_Click(this, new RoutedEventArgs());
                         break;
                     default:
                         break;

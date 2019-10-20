@@ -87,16 +87,40 @@ namespace Password_Manager
 
         }
 
-        public static string encodeMix(string data, string str1)
+        public static string encodeMix(string data, string psw)
         {
             try
             {
+                string str1 =  Base64Encode(hashFromString(psw).Substring(0, (psw.Length < 32) ? psw.Length : 32))  ;
                 data = data.Insert(data.Length - 2, str1);
                 data = Base64Encode(data);
-                data = data.Insert(5, str1.Substring(0,4));
+                data = data.Insert(5, str1);
                 data = Base64Encode(data);
-                data = data.Insert(10, str1.Substring(4,6));
-                return Base64Encode(data);
+                data = data.Insert(10, str1);
+                data = Base64Encode(data);
+                data = data.Insert(7, str1);
+                data = Base64Encode(data);
+                data = data.Insert(3, str1);
+                data = Base64Encode(data);
+                data = data.Insert((int)(data.Length / 2), data);
+                data = Base64Encode(data);
+                data = data.Insert((int)(data.Length / 2), data);
+                data = data.Insert((int)(data.Length / 2), str1);
+                data = Base64Encode(data);
+                data = data.Insert((int)(data.Length / 3), data);
+                data = data.Insert((int)(data.Length / 3), str1);
+                data = Base64Encode(data);
+                data = data.Insert((int)(data.Length / 4), data);
+                data = data.Insert((int)(data.Length / 4), str1);
+                data = Base64Encode(data);
+                data = data.Insert((int)(data.Length / 2), data.Substring(0, (int)(data.Length / 2)));
+                data = data.Insert((int)(data.Length / 3), data);
+                data = data.Insert((int)(data.Length / 4), str1);
+                data = data.Insert((int)(data.Length / 4), str1);
+                data = data.Insert((int)(data.Length / 3), str1);
+                data = data.Insert((int)(data.Length / 2), str1);
+                return data;
+
             }
             catch (Exception)
             {
@@ -105,21 +129,22 @@ namespace Password_Manager
             }
         }
 
-        public static string decodeMix(string data, string str1)
-        {
-            try
-            {
-                string tempData = data;
-                tempData = Base64Decode(tempData);
-                tempData = tempData.Remove(tempData.Length - str1.Length - 2, str1.Length);
-                return tempData;
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Decoding error!","Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return data;
-            }
-        }
+        //public static string decodeMix(string data, string psw)
+        //{
+        //    try
+        //    {
+        //        string str1 = Base64Encode(hashFromString(psw).Substring(0, psw.Length));
+        //        string tempData = data;
+        //        tempData = Base64Decode(tempData);
+        //        tempData = tempData.Remove(tempData.Length - str1.Length - 2, str1.Length);
+        //        return tempData;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        MessageBox.Show("Decoding error!","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        return data;
+        //    }
+        //}
 
         public static string readTextFromFile(string filePath)
         {

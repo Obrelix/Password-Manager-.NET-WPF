@@ -15,6 +15,14 @@
                 <ImageBrush/>
             </Menu.Background>
 
+            <MenuItem Name="mnuMenu" Header="Menu" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" FontWeight="Bold">
+                <MenuItem Name="mnuPassword" Header="Password" Click="Menu_Click" />
+                <!--<MenuItem Name="mnuReport" Header="Report an _issue" Click="Menu_Click" />-->
+                <MenuItem Name="mnuHelp" Header="Help"  FontWeight="Bold">
+                    <MenuItem Name="mnuDownload" Header="Download" Click="Menu_Click" />
+                    <MenuItem Name="mnuReport" Header="Report an _issue" Click="Menu_Click" />
+                </MenuItem>
+            </MenuItem>
             <Separator />
             <MenuItem x:Name="mnuSaveFile" ToolTip="Save data to file." Click="Menu_Click" Margin="0">
                 <MenuItem.Header>
@@ -44,14 +52,6 @@
                     </StackPanel>
                 </MenuItem.Header>
             </MenuItem>
-            <Separator />
-            <Separator />
-            <Separator />
-            <MenuItem Name="mnuHelp" Header="Help" Background="#FFB4FFF5" FontWeight="Bold">
-                <MenuItem Name="mnuDownload" Header="Download" Click="Menu_Click" />
-                <MenuItem Name="mnuReport" Header="Report an _issue" Click="Menu_Click" />
-            </MenuItem>
-
         </Menu>
         <Grid>
             <Grid.ColumnDefinitions>
